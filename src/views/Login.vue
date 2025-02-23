@@ -17,27 +17,15 @@
               <!-- Email -->
               <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>
-                <input
-                  type="email"
-                  id="email"
-                  v-model="email"
-                  class="form-control"
-                  placeholder="ejemplo@correo.com"
-                  required
-                />
+                <input type="email" id="email" v-model="email" class="form-control" placeholder="ejemplo@correo.com"
+                  required />
               </div>
 
               <!-- Contraseña -->
               <div class="mb-4">
                 <label for="password" class="form-label">Contraseña</label>
-                <input
-                  type="password"
-                  id="password"
-                  v-model="password"
-                  class="form-control"
-                  placeholder="••••••••"
-                  required
-                />
+                <input type="password" id="password" v-model="password" class="form-control" placeholder="••••••••"
+                  required />
               </div>
 
               <!-- Botón de Iniciar Sesión -->
@@ -80,6 +68,9 @@ const handleLogin = async () => {
       email: email.value,
       password: password.value,
     });
+
+    // Verificar si el token existe antes de guardarlo
+    console.log("Token recibido:", response.data.token);
 
     // Guardar el token en localStorage
     localStorage.setItem("token", response.data.token);

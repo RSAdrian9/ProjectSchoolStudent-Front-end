@@ -1,99 +1,79 @@
-<template>
-    <nav class="bg-white p-4 shadow-md">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <!-- Logo y Título -->
-            <div class="flex items-center space-x-2">
-                <img src="@/assets/solicitud.png" alt="Logo" class="w-10 h-10" />
-                <h1 class="text-black text-2xl font-semibold">Gestión de Solicitudes</h1>
-            </div>
-
-            <!-- Enlaces de Navegación -->
-            <div class="flex items-center space-x-6">
-                <!-- Si está autenticado -->
-                <template v-if="isLoggedIn">
-                    <RouterLink to="/applications"
-                        class="text-black hover:text-gray-300 flex items-center space-x-1 transition duration-300">
-                        <i class="bi bi-card-checklist"></i>
-                        <span>Solicitudes</span>
-                    </RouterLink>
-
-                    <RouterLink to="/empresas"
-                        class="text-black hover:text-gray-300 flex items-center space-x-1 transition duration-300">
-                        <i class="bi bi-building"></i>
-                        <span>Empresas</span>
-                    </RouterLink>
-
-                    <!-- Perfil -->
-                    <button class="flex items-center text-black hover:text-indigo-300 transition duration-300"
-                        @click="router.push('/profile')">
-                        <img src="@/assets/user.png" alt="Perfil"
-                            class="w-10 h-10 rounded-full border-2 border-black" />
-                    </button>
-
-                    <!-- Botón de Logout -->
-                    <button @click="handleLogout"
-                        class="text-black flex items-center space-x-1 hover:text-red-600 transition duration-300">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Log Out</span>
-                    </button>
-                </template>
-
-                <!-- Si NO está autenticado -->
-                <template v-else>
-                    <RouterLink to="/login"
-                        class="text-black hover:text-gray-500 flex items-center space-x-1 transition duration-300">
-                        <i class="bi bi-box-arrow-in-right"></i>
-                        <span>Iniciar sesión</span>
-                    </RouterLink>
-
-                    <RouterLink to="/register"
-                        class="text-black hover:text-gray-500 flex items-center space-x-1 transition duration-300">
-                        <i class="bi bi-person-plus"></i>
-                        <span>Registrarse</span>
-                    </RouterLink>
-                </template>
-            </div>
-        </div>
-    </nav>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import api from '../api/api';
 
-// Router para la navegación
 const router = useRouter();
+const userName = ref<string>();
 
-// Estado para verificar si el usuario está autenticado
-const isLoggedIn = ref<boolean>(false);
-
-// Función para verificar autenticación por token
-const checkAuth = () => {
-    isLoggedIn.value = !!localStorage.getItem("token");
+// Función para obtener el usuario autenticado
+const fetchUser = async () => {
+  try {
+    const { data } = await api.get('/user'); // Obtener el usuario del backend
+    userName.value = data.name;
+    console.log('Usuario autenticado:', data);
+  } catch (err) {
+    console.error('Error al obtener el usuario:', err);
+    alert('Error al cargar el usuario. Redirigiendo al login.');
+    router.push('/login');
+  }
 };
-
-// Escuchar cambios en el localStorage
-const handleStorageChange = () => checkAuth();
-
-// Al montar el componente
-onMounted(() => {
-    checkAuth();
-    window.addEventListener("storage", handleStorageChange);
-});
-
-// Limpiar el listener al desmontar
-onUnmounted(() => {
-    window.removeEventListener("storage", handleStorageChange);
-});
 
 // Cerrar sesión
-const handleLogout = () => {
-    localStorage.removeItem("token");
-    isLoggedIn.value = false;
-    router.push("/login");
+const handleLogout = async () => {
+  try {
+    await api.post('/logout');
+    console.log('Sesión cerrada'); // Verifica en la consola que la sesión se ha cerrado
+    localStorage.removeItem('token');
+    console.log('Token eliminado'); // Verifica en la consola que el token se ha eliminado
+    router.push('/login');
+  } catch (err) {
+    console.error('Error al cerrar sesión:', err);
+    alert('Error al cerrar sesión. Intenta de nuevo.');
+  }
 };
+
+onMounted(() => {
+  fetchUser(); // Obtener el usuario al montar el componente
+});
 </script>
 
+<template>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <!-- Título a la izquierda -->
+      <a class="navbar-brand" href="#">Dashboard</a>
+
+      <!-- Botones de navegación -->
+      <div class="d-flex align-items-center">
+        <router-link to="/students" class="nav-link me-3">Students</router-link>
+        <router-link to="/schools" class="nav-link me-3">Schools</router-link>
+
+        <!-- Dropdown del usuario -->
+        <div class="dropdown">
+          <button
+            class="btn btn-light dropdown-toggle"
+            type="button"
+            id="userDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{ userName }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+              <button class="dropdown-item" @click="handleLogout">Cerrar Sesión</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</template>
+
 <style scoped>
-/* Puedes personalizar más estilos aquí si lo necesitas */
+/* Evitar el scroll cuando se despliega el dropdown */
+.dropdown-menu {
+  position: absolute !important;
+}
 </style>
