@@ -2,7 +2,7 @@
     <div class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
         <div class="text-center">
             <!-- Bienvenida -->
-            <h1 class="mb-4 fw-bold">¡Bienvenido a la Plataforma de Gestión de Solicitudes!</h1>
+            <h1 class="mb-4 fw-bold">¡Bienvenido a la Plataforma de Gestión de Instituto!</h1>
             <p class="lead mb-5">
                 Administra fácilmente las solicitudes de alumnado. Elige una opción para comenzar.
             </p>

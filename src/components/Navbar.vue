@@ -26,7 +26,7 @@ const handleLogout = async () => {
     console.log('Sesión cerrada'); // Verifica en la consola que la sesión se ha cerrado
     localStorage.removeItem('token');
     console.log('Token eliminado'); // Verifica en la consola que el token se ha eliminado
-    router.push('/login');
+    router.push('/login'); /* Cambiar el redireccionamiento a la página del home */
   } catch (err) {
     console.error('Error al cerrar sesión:', err);
     alert('Error al cerrar sesión. Intenta de nuevo.');
@@ -42,13 +42,14 @@ onMounted(() => {
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <!-- Título a la izquierda -->
-      <a class="navbar-brand" href="#">Dashboard</a>
+      <a class="navbar-brand" href="/dashboard">Dashboard</a>
 
       <!-- Botones de navegación -->
       <div class="d-flex align-items-center">
         <router-link to="/students" class="nav-link me-3">Students</router-link>
         <router-link to="/schools" class="nav-link me-3">Schools</router-link>
 
+        <i class="bi bi-person-circle"></i>
         <!-- Dropdown del usuario -->
         <div class="dropdown">
           <button
@@ -58,11 +59,12 @@ onMounted(() => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            {{ userName }}
+            
           </button>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li>
-              <button class="dropdown-item" @click="handleLogout">Cerrar Sesión</button>
+              <p class="dropdown-item">User: {{ userName }}</p>
+              <button class="dropdown-item" @click="handleLogout">Log out</button>
             </li>
           </ul>
         </div>
