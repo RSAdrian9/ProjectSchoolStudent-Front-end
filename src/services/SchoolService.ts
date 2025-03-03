@@ -3,7 +3,7 @@ import API from "../api/api";
 export const getSchools = async () => {
     try {
         const token = localStorage.getItem("token");
-        const response = await API.get("/school", {
+        const response = await API.get("/schools", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -18,7 +18,7 @@ export const getSchools = async () => {
 export const getSchoolById = async (id: number) => {
     try {
         const token = localStorage.getItem("token");
-        const response = await API.get(`/school/${id}`, {
+        const response = await API.get(`/schools/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -33,7 +33,7 @@ export const getSchoolById = async (id: number) => {
 export const createSchool = async (schoolData: any) => {
     try {
         const token = localStorage.getItem("token");
-        const response = await API.post("/school", schoolData, {
+        const response = await API.post("/schools", schoolData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -49,7 +49,7 @@ export const createSchool = async (schoolData: any) => {
 export const updateSchool = async (id: number, schoolData: any) => {
     try {
         const token = localStorage.getItem("token");
-        const response = await API.put(`/school/${id}`, schoolData, {
+        const response = await API.put(`/schools/${id}`, schoolData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -61,10 +61,11 @@ export const updateSchool = async (id: number, schoolData: any) => {
     }
 };
 
+// se está usando
 export const deleteSchool = async (id: number) => {
     try {
         const token = localStorage.getItem("token");
-        await API.delete(`/school/${id}`, {
+        await API.delete(`/schools/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

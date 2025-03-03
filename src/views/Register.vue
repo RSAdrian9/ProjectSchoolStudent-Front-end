@@ -80,17 +80,21 @@ const handleRegister = async () => {
     }
 
     try {
+        // Si usas Sanctum, solicita la cookie CSRF
+        await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
+
         const response = await axios.post('http://127.0.0.1:8000/api/register', {
             name: name.value,
             email: email.value,
             password: password.value,
+            password_confirmation: confirmPassword.value, // Importante agregar este campo
         });
 
         // Guardar el token en el localStorage (si tu API lo devuelve)
         localStorage.setItem('token', response.data.token);
 
         // Redirigir al dashboard o página principal
-        router.push('/dashboard');
+        router.push('/login');
     } catch (error) {
         errorMessage.value = 'Error al registrar. Verifica los datos.';
         console.error('Error en el registro:', error);
