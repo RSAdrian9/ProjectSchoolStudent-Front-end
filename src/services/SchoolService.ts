@@ -10,7 +10,7 @@ export const getSchools = async () => {
         });
         return response.data;
     } catch (error) {
-        console.error("Error al obtener los institutos:", error);
+        console.error("Error fetching schools:", error);
         return []; 
     }
 };
@@ -25,7 +25,7 @@ export const getSchoolById = async (id: number) => {
         });
         return response.data;
     } catch (error) {
-        console.error(`Error al obtener el instituto con ID ${id}:`, error);
+        console.error(`Error fetching school with ID ${id}:`, error);
         throw error;
     }
 };
@@ -38,10 +38,10 @@ export const createSchool = async (schoolData: any) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("Instituto creado:", response.data);
+        console.log("School created:", response.data);
         return response.data;
     } catch (error) {
-        console.error("Error al crear el instituto:", error);
+        console.error("Error creating school:", error);
         throw error;
     }
 };
@@ -56,12 +56,11 @@ export const updateSchool = async (id: number, schoolData: any) => {
         });
         return response.data;
     } catch (error) {
-        console.error(`Error al actualizar el instituto con ID ${id}:`, error);
+        console.error(`Error updating school with ID ${id}:`, error);
         throw error;
     }
 };
 
-// se está usando
 export const deleteSchool = async (id: number) => {
     try {
         const token = localStorage.getItem("token");
@@ -71,7 +70,7 @@ export const deleteSchool = async (id: number) => {
             },
         });
     } catch (error) {
-        console.error(`Error al eliminar el instituto con ID ${id}:`, error);
+        console.error(`Error deleting school with ID ${id}:`, error);
         throw error;
     }
 };

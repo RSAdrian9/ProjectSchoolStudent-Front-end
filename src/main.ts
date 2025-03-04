@@ -4,7 +4,13 @@ import App from "./App.vue";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap';
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 const app = createApp(App);
+const options = {
+    // You can set your default options here
+};
 app.use(router);
 app.mount("#app");
+app.use(Toast, options);

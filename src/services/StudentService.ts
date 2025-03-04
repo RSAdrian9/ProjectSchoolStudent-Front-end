@@ -10,7 +10,7 @@ export const getStudents = async () => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error al obtener los estudiantes:", error);
+    console.error("Error fetching students:", error);
     throw error;
   }
 };
@@ -25,7 +25,7 @@ export const getStudentById = async (id: number) => {
     });
     return response.data;
   } catch (error) {
-    console.error(`Error al obtener estudiante con ID ${id}:`, error);
+    console.error(`Error fetching student with ID ${id}:`, error);
     throw error;
   }
 };
@@ -38,10 +38,10 @@ export const createStudent = async (studentData: any) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Estudiante creado:", response.data);
+    console.log("Student created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error al crear estudiante:", error);
+    console.error("Error creating student:", error);
     throw error;
   }
 };
@@ -56,12 +56,11 @@ export const updateStudent = async (id: number, studentData: any) => {
     });
     return response.data;
   } catch (error) {
-    console.error(`Error al actualizar estudiante con ID ${id}:`, error);
+    console.error(`Error updating student with ID ${id}:`, error);
     throw error;
   }
 };
 
-// se está usando
 export const deleteStudent = async (id: number) => {
   try {
     const token = localStorage.getItem("token");

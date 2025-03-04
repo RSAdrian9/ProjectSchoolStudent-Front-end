@@ -2,26 +2,26 @@
 import { defineProps, defineEmits, ref, watch } from 'vue';
 import type { Student } from '../../types/indexType';
 
-// Props: Recibe el estudiante seleccionado
+// Props: Receives the selected student
 const props = defineProps<{
   student: Student | null;
 }>();
 
-// Emitir eventos al componente padre
+// Emit events to the parent component
 const emit = defineEmits<{
   (e: 'create-student', student: Partial<Student>): void;
   (e: 'update-student', student: Partial<Student>): void;
   (e: 'delete-student', id: number): void;
 }>();
 
-// Estado del formulario
+// Form state
 const form = ref<Partial<Student>>({
   name: '',
   email: '',
   school_id: null,
 });
 
-// Rellenar el formulario al seleccionar un estudiante
+// Fill the form when a student is selected
 watch(() => props.student, (newStudent) => {
   if (newStudent) {
     form.value = { ...newStudent };
@@ -30,10 +30,10 @@ watch(() => props.student, (newStudent) => {
   }
 });
 
-// Manejar creación o actualización
-// Enviar creación o actualización
+// Handle creation or update
+// Send creation or update
 const submitForm = () => {
-  console.log('🔄 Emitiendo actualización con:', form.value);
+  console.log('🔄 Emitting update with:', form.value);
   if (props.student) {
     emit('update-student', form.value);
   } else {
@@ -41,61 +41,59 @@ const submitForm = () => {
   }
 };
 
-// Limpiar los campos del formulario
+// Clear form fields
 const clearForm = () => {
   form.value = { name: '', email: '', school_id: null };
 };
 
-
-// Eliminar estudiante
+// Delete student
 const handleDelete = () => {
   if (!props.student?.id) {
-    console.error('❌ ID inválido en StudentDetail.vue:', props.student?.id);
+    console.error('❌ Invalid ID in StudentDetail.vue:', props.student?.id);
     return;
   }
 
-  if (confirm('¿Seguro que quieres eliminar este estudiante?')) {
-    console.log('🗑️ Emitiendo eliminación con ID:', props.student.id);
+  if (confirm('Are you sure you want to delete this student?')) {
+    console.log('🗑️ Emitting deletion with ID:', props.student.id);
     emit('delete-student', props.student.id);
   }
 };
-
 
 </script>
 
 <template>
   <div>
-    <h3>{{ student ? 'Editar Estudiante' : 'Crear Estudiante' }}</h3>
+    <h3>{{ student ? 'Edit Student' : 'Create Student' }}</h3>
 
-    <!-- Formulario -->
+    <!-- Form -->
     <form @submit.prevent="submitForm">
       <div class="form-group">
-        <label>Nombre:</label>
-        <input v-model="form.name" type="text" required placeholder="Nombre del estudiante" />
+        <label>Name:</label>
+        <input v-model="form.name" type="text" required placeholder="Student's name" />
       </div>
 
       <div class="form-group">
         <label>Email:</label>
-        <input v-model="form.email" type="email" required placeholder="Correo electrónico" />
+        <input v-model="form.email" type="email" required placeholder="Email" />
       </div>
 
       <div class="form-group">
-        <label>ID Instituto:</label>
-        <input v-model="form.school_id" type="number" placeholder="ID del Instituto:" />
+        <label>School ID:</label>
+        <input v-model="form.school_id" type="number" placeholder="School ID" />
       </div>
 
-      <!-- Botón de Crear o Actualizar -->
+      <!-- Create or Update Button -->
       <button type="submit" class="btn btn-primary">
-        {{ student ? 'Actualizar' : 'Crear' }}
+        {{ student ? 'Update' : 'Create' }}
       </button>
 
-      <!-- Botón de Eliminar (solo si hay estudiante seleccionado) -->
+      <!-- Delete Button (only if a student is selected) -->
       <button v-if="student" type="button" @click="handleDelete" class="btn btn-danger ml-2">
-        Eliminar
+        Delete
       </button>
-      <!-- Botón de Limpiar Campos -->
+      <!-- Clear Fields Button -->
       <button type="button" @click="clearForm" class="btn btn-secondary ml-2">
-        Limpiar Campos
+        Clear Fields
       </button>
     </form>
   </div>

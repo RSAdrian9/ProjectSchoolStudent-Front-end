@@ -2,25 +2,25 @@
 import { defineProps, defineEmits, ref, watch } from 'vue';
 import type { School } from '../../types/indexType';
 
-// Props: Recibe el instituto seleccionado
+// Props: Receives the selected school
 const props = defineProps<{
   school: School | null;
 }>();
 
-// Emitir eventos al componente padre
+// Emit events to the parent component
 const emit = defineEmits<{
   (e: 'create-school', school: Partial<School>): void;
   (e: 'update-school', school: Partial<School>): void;
   (e: 'delete-school', id: number): void;
 }>();
 
-// Estado del formulario
+// Form state
 const form = ref<Partial<School>>({
   name: '',
   city: '',
 });
 
-// Rellenar el formulario al seleccionar un instituto
+// Fill the form when a school is selected
 watch(() => props.school, (newSchool) => {
   if (newSchool) {
     form.value = { ...newSchool };
@@ -29,10 +29,10 @@ watch(() => props.school, (newSchool) => {
   }
 });
 
-// Manejar creación o actualización
-// Enviar creación o actualización
+// Handle creation or update
+// Send creation or update
 const submitForm = () => {
-  console.log('🔄 Emitiendo actualización con:', form.value);
+  console.log('🔄 Emitting update with:', form.value);
   if (props.school) {
     emit('update-school', form.value);
   } else {
@@ -40,56 +40,53 @@ const submitForm = () => {
   }
 };
 
-// Limpiar los campos del formulario
+// Clear form fields
 const clearForm = () => {
   form.value = { name: '', city: '' };
 };
 
-
-// Eliminar instituto
+// Delete school
 const handleDelete = () => {
   if (!props.school?.id) {
-    console.error('❌ ID inválido en SchoolDetail.vue:', props.school?.id);
+    console.error('❌ Invalid ID in SchoolDetail.vue:', props.school?.id);
     return;
   }
 
-  if (confirm('¿Seguro que quieres eliminar este instituto?')) {
-    console.log('🗑️ Emitiendo eliminación con ID:', props.school.id);
+  if (confirm('Are you sure you want to delete this school?')) {
+    console.log('🗑️ Emitting deletion with ID:', props.school.id);
     emit('delete-school', props.school.id);
   }
 };
-
-
 </script>
 
 <template>
   <div>
-    <h3>{{ school ? 'Editar Instituto' : 'Crear Instituto' }}</h3>
+    <h3>{{ school ? 'Edit School' : 'Create School' }}</h3>
 
-    <!-- Formulario -->
+    <!-- Form -->
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label>Name:</label>
-        <input v-model="form.name" type="text" required placeholder="Nombre del instituto" />
+        <input v-model="form.name" type="text" required placeholder="School name" />
       </div>
 
       <div class="form-group">
         <label>City:</label>
-        <input v-model="form.city" type="text" required placeholder="Ciudad" />
+        <input v-model="form.city" type="text" required placeholder="City" />
       </div>
 
-      <!-- Botón de Crear o Actualizar -->
+      <!-- Create or Update Button -->
       <button type="submit" class="btn btn-primary">
-        {{ school ? 'Actualizar' : 'Crear' }}
+        {{ school ? 'Update' : 'Create' }}
       </button>
 
-      <!-- Botón de Eliminar (solo si hay instituto seleccionado) -->
+      <!-- Delete Button (only if a school is selected) -->
       <button v-if="school" type="button" @click="handleDelete" class="btn btn-danger ml-2">
-        Eliminar
+        Delete
       </button>
-      <!-- Botón de Limpiar Campos -->
+      <!-- Clear Fields Button -->
       <button type="button" @click="clearForm" class="btn btn-secondary ml-2">
-        Limpiar Campos
+        Clear Fields
       </button>
     </form>
   </div>
