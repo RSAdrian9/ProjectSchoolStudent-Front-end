@@ -11,10 +11,10 @@ const emit = defineEmits<{
   (e: 'select-school', school: School | null): void;
 }>();
 
-// Comprobar si un instituto está seleccionado
+// Check if a school is selected
 const isSelected = (school: School) => props.selectedSchool?.id === school.id;
 
-// Emitir el instituto seleccionado o deseleccionar si es el mismo
+// Emit the selected school or deselect if it is the same
 const selectedSchool = (school: School) => {
   emit('select-school', isSelected(school) ? null : school);
 };
@@ -22,13 +22,13 @@ const selectedSchool = (school: School) => {
 
 <template>
   <div>
-    <h3>Lista de Institutos</h3>
+    <h3>School List</h3>
 
     <table class="school-table">
       <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Ciudad</th>
+          <th>Name</th>
+          <th>City</th>
         </tr>
       </thead>
       <tbody>
@@ -62,6 +62,6 @@ const selectedSchool = (school: School) => {
 
 .selected {
   background-color: #d4edda;
-  /* Verde suave */
+  /* Soft green */
 }
 </style>

@@ -2,53 +2,53 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <!-- Tarjeta de Registro -->
+                <!-- Registration Card -->
                 <div class="card shadow-lg rounded-4">
                     <div class="card-body p-5">
-                        <h2 class="text-center mb-4">Crear una cuenta</h2>
+                        <h2 class="text-center mb-4">Create an Account</h2>
 
-                        <!-- Mostrar mensaje de error si existe -->
+                        <!-- Show error message if exists -->
                         <div v-if="errorMessage" class="alert alert-danger" role="alert">
                             {{ errorMessage }}
                         </div>
 
-                        <!-- Formulario de Registro -->
+                        <!-- Registration Form -->
                         <form @submit.prevent="handleRegister">
-                            <!-- Nombre -->
+                            <!-- Name -->
                             <div class="mb-3">
-                                <label for="name" class="form-label">Nombre completo</label>
-                                <input type="text" id="name" v-model="name" class="form-control" placeholder="Tu nombre"
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" id="name" v-model="name" class="form-control" placeholder="Your name"
                                     required />
                             </div>
 
-                            <!-- Correo Electrónico -->
+                            <!-- Email -->
                             <div class="mb-3">
-                                <label for="email" class="form-label">Correo Electrónico</label>
+                                <label for="email" class="form-label">Email</label>
                                 <input type="email" id="email" v-model="email" class="form-control"
-                                    placeholder="ejemplo@correo.com" required />
+                                    placeholder="example@domain.com" required />
                             </div>
 
-                            <!-- Contraseña -->
+                            <!-- Password -->
                             <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
+                                <label for="password" class="form-label">Password</label>
                                 <input type="password" id="password" v-model="password" class="form-control"
                                     placeholder="••••••••" required />
                             </div>
 
-                            <!-- Confirmar Contraseña -->
+                            <!-- Confirm Password -->
                             <div class="mb-4">
-                                <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" id="confirmPassword" v-model="confirmPassword"
-                                    class="form-control" placeholder="Repite tu contraseña" required />
+                                    class="form-control" placeholder="Repeat your password" required />
                             </div>
 
-                            <!-- Botón de Registro -->
-                            <button type="submit" class="btn btn-primary w-100 mb-3">Registrarse</button>
+                            <!-- Register Button -->
+                            <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
 
-                            <!-- Enlace a Iniciar Sesión -->
+                            <!-- Link to Login -->
                             <p class="text-center mt-3">
-                                ¿Ya tienes una cuenta?
-                                <router-link to="/login" class="text-decoration-none">Iniciar sesión</router-link>
+                                Already have an account?
+                                <router-link to="/login" class="text-decoration-none">Login</router-link>
                             </p>
                         </form>
                     </div>
@@ -62,6 +62,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { showToast } from '../composables/useToast';
 
 const name = ref('');
 const email = ref('');
@@ -70,34 +71,34 @@ const confirmPassword = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
-// Manejar el Registro
+// Handle Registration
 const handleRegister = async () => {
     errorMessage.value = '';
 
     if (password.value !== confirmPassword.value) {
-        errorMessage.value = 'Las contraseñas no coinciden.';
+        showToast('Passwords do not match.', 'error');
         return;
     }
 
     try {
-        // Si usas Sanctum, solicita la cookie CSRF
+        // If using Sanctum, request the CSRF cookie
         await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
 
         const response = await axios.post('http://127.0.0.1:8000/api/register', {
             name: name.value,
             email: email.value,
             password: password.value,
-            password_confirmation: confirmPassword.value, // Importante agregar este campo
+            password_confirmation: confirmPassword.value, // Important to add this field
         });
 
-        // Guardar el token en el localStorage (si tu API lo devuelve)
+        // Save the token in localStorage (if your API returns it)
         localStorage.setItem('token', response.data.token);
 
-        // Redirigir al dashboard o página principal
+        // Redirect to the dashboard or main page
         router.push('/login');
     } catch (error) {
-        errorMessage.value = 'Error al registrar. Verifica los datos.';
-        console.error('Error en el registro:', error);
+        showToast('Registration error. Check your data.', 'error');
+        console.error('Registration error:', error);
     }
 };
 </script>

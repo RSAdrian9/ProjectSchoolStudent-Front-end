@@ -11,10 +11,10 @@ const emit = defineEmits<{
   (e: 'select-student', student: Student | null): void;
 }>();
 
-// Comprobar si un estudiante está seleccionado
+// Check if a student is selected
 const isSelected = (student: Student) => props.selectedStudent?.id === student.id;
 
-// Emitir el estudiante seleccionado o deseleccionar si es el mismo
+// Emit the selected student or deselect if it is the same
 const selectStudent = (student: Student) => {
   emit('select-student', isSelected(student) ? null : student);
 };
@@ -22,14 +22,14 @@ const selectStudent = (student: Student) => {
 
 <template>
   <div>
-    <h3>Lista de Estudiantes</h3>
+    <h3>Student List</h3>
 
     <table class="student-table">
       <thead>
         <tr>
-          <th>Nombre</th>
+          <th>Name</th>
           <th>Email</th>
-          <th>Instituto</th>
+          <th>School</th>
         </tr>
       </thead>
       <tbody>
@@ -37,7 +37,7 @@ const selectStudent = (student: Student) => {
           :class="{ selected: isSelected(student) }">
           <td>{{ student.name }}</td>
           <td>{{ student.email }}</td>
-          <td>{{ student.school?.name || 'Sin Instituto' }}</td>
+          <td>{{ student.school?.name || 'No School' }}</td>
         </tr>
       </tbody>
     </table>
@@ -64,6 +64,6 @@ const selectStudent = (student: Student) => {
 
 .selected {
   background-color: #d4edda;
-  /* Verde suave */
+  /* Soft green */
 }
 </style>

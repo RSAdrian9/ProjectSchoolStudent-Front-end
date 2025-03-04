@@ -2,42 +2,42 @@
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <!-- Tarjeta de Login -->
+        <!-- Login Card -->
         <div class="card shadow-lg rounded-4">
           <div class="card-body p-5">
-            <h2 class="text-center mb-4">Iniciar Sesión</h2>
+            <h2 class="text-center mb-4">Login</h2>
 
-            <!-- Mostrar error si existe -->
+            <!-- Show error if exists -->
             <div v-if="error" class="alert alert-danger" role="alert">
               {{ error }}
             </div>
 
-            <!-- Formulario de Login -->
+            <!-- Login Form -->
             <form @submit.prevent="handleLogin">
               <!-- Email -->
               <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" id="email" v-model="email" class="form-control" placeholder="ejemplo@correo.com"
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" v-model="email" class="form-control" placeholder="example@mail.com"
                   required />
               </div>
 
-              <!-- Contraseña -->
+              <!-- Password -->
               <div class="mb-4">
-                <label for="password" class="form-label">Contraseña</label>
+                <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" v-model="password" class="form-control" placeholder="••••••••"
                   required />
               </div>
 
-              <!-- Botón de Iniciar Sesión -->
+              <!-- Login Button -->
               <button type="submit" class="btn btn-primary w-100 mb-3">
-                Iniciar Sesión
+                Login
               </button>
 
-              <!-- Enlace a Registro -->
+              <!-- Link to Register -->
               <p class="text-center mt-3">
-                ¿No tienes una cuenta?
+                Don't have an account?
                 <router-link to="/register" class="text-decoration-none">
-                  Regístrate
+                  Register
                 </router-link>
               </p>
             </form>
@@ -51,38 +51,41 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import api from "../api/api"; // Importa tu instancia de Axios
+import api from "../api/api"; // Import your Axios instance
+import { showToast } from "../composables/useToast"; // Import your Toast function
 
-// Variables reactivas
+// Reactive variables
 const email = ref<string>("");
 const password = ref<string>("");
 const error = ref<string>("");
 const router = useRouter();
 
-// Manejar el login
+// Handle login
 const handleLogin = async () => {
   error.value = "";
   try {
-    // Llama al endpoint de login
+    // Call the login endpoint
     const response = await api.post("/login", {
       email: email.value,
       password: password.value,
     });
 
-    // Verificar si el token existe antes de guardarlo
-    console.log("Token recibido:", response.data.token);
+    // Verify if the token exists before saving it
+    console.log("Token received:", response.data.token);
 
-    // Guardar el token en localStorage
+    // Save the token in localStorage
     localStorage.setItem("token", response.data.token);
 
-    // Redirigir al home
+    showToast("Welcome!", "success");
+
+    // Redirect to the main dashboard
     router.push("/dashboard");
 
-    // Disparar evento para otros componentes (Navbar, por ejemplo)
+    // Trigger event for other components (Navbar, for example)
     window.dispatchEvent(new Event("storage"));
   } catch (err) {
-    error.value = "Credenciales incorrectas";
-    console.error("Error en el login:", err);
+    showToast("Incorrect credentials", "error");
+    console.error("Login error:", err);
   }
 };
 </script>

@@ -7,79 +7,79 @@ import SchoolTable from '../components/component-table/SchoolTable.vue';
 import type { School } from '../types/indexType';
 import Navbar from '../components/Navbar.vue';
 import { deleteSchool } from '../services/SchoolService';
-
+import { showToast } from '../composables/useToast';
 
 const schools = ref<School[]>([]);
 const selectedSchool = ref<School | null>(null);
 
-// Paginación
+// Pagination
 const currentPage = ref(1);
 const lastPage = ref(1);
 
-// Cargar institutos con paginación
+// Load schools with pagination
 const fetchSchools = async (page = 1) => {
   try {
     const response = await api.get(`/schools?page=${page}`);
-    schools.value = response.data.data; // Datos de los institutos
-    currentPage.value = response.data.meta.current_page; // Página actual
-    lastPage.value = response.data.meta.last_page; // Última página
+    schools.value = response.data.data; // School data
+    currentPage.value = response.data.meta.current_page; // Current page
+    lastPage.value = response.data.meta.last_page; // Last page
   } catch (err) {
-    console.error('Error al cargar los institutos:', err);
+    console.error('Error loading schools:', err);
   }
 };
 
-// Seleccionar un instituto
+// Select a school
 const selectSchool = (school: School | null) => {
   selectedSchool.value = school;
 };
 
-// Crear un nuevo instituto
+// Create a new school
 const handleCreateSchool = async (newSchool: Partial<School>) => {
   try {
     await api.post('/schools', newSchool);
-    fetchSchools(currentPage.value); // Recargar la lista actual
-    selectedSchool.value = null; // Limpiar selección después de crear
+    showToast('School created successfully', 'success');
+    fetchSchools(currentPage.value); // Reload the current list
+    selectedSchool.value = null; // Clear selection after creation
   } catch (err) {
-    console.error('Error al crear instituto:', err);
+    showToast('Error creating school', 'error');
+    console.error('Error creating school:', err);
   }
 };
 
-// Actualizar el intituto seleccionado
+// Update the selected school
 const handleUpdateSchool = async (school: Partial<School>) => {
   if (!selectedSchool.value) return;
   try {
-    const payload = JSON.parse(JSON.stringify(school)); // Solución Proxy
-    console.log('🔍 Payload enviado a la API:', payload);
+    const payload = JSON.parse(JSON.stringify(school)); // Proxy solution
+    console.log('🔍 Payload sent to API:', payload);
 
     const response = await api.put(`/schools/${selectedSchool.value.id}`, payload);
-    console.log('✅ Respuesta de la API (update):', response);
+    console.log('✅ API response (update):', response);
 
-    alert('✅ Instituto actualizado exitosamente');
+    showToast('School updated successfully', 'success');
     fetchSchools();
     selectedSchool.value = null;
   } catch (error) {
-    console.error('❌ Error al actualizar el instituto:', (error as any).response?.data || error);
-    alert('❌ Error al actualizar el instituto');
+    showToast('Error updating school', 'error');
+    console.error('❌ Error updating school:', (error as any).response?.data || error);
   }
 };
 
-
-// Eliminar el instituto seleccionado
+// Delete the selected school
 const handleDeleteSchool = async (id: number) => {
-  if (!confirm(`¿Seguro que quieres eliminar al instituto con ID ${id}?`)) return;
+  if (!confirm(`Are you sure you want to delete the school with ID ${id}?`)) return;
 
   try {
     await deleteSchool(id);
-    alert('✅ Instituto eliminado exitosamente');
-    fetchSchools(); // Actualiza la lista
+    showToast('School deleted successfully', 'success');
+    fetchSchools(); // Update the list
   } catch (error) {
-    console.error('❌ Error al eliminar instituto:', error);
-    alert('❌ Error al eliminar el instituto');
+    showToast('Error deleting school', 'error');
+    console.error('❌ Error deleting school:', error);
   }
 };
 
-
-// Cambiar de página
+// Change page
 const changePage = (page: number) => {
   if (page >= 1 && page <= lastPage.value) {
     fetchSchools(page);
@@ -90,30 +90,28 @@ onMounted(() => fetchSchools());
 </script>
 
 <template>
-  <!-- Incluir el Navbar -->
+  <!-- Include Navbar -->
   <Navbar />
 
-  <div class="schools-view container mt-4"> <!-- Quitar para que no haya scroll -->
-    <!--<h2 class="text-center mb-4">Gestión de Institutos</h2>-->
-
+  <div class="schools-view container mt-4">
     <div class="content-wrapper">
-      <!-- Tabla de institutos (izquierda) -->
+      <!-- School table (left) -->
       <div class="panel table-panel">
         <SchoolTable :schools="schools" :selectedSchool="selectedSchool" @select-school="selectSchool" />
 
-        <!-- Controles de paginación -->
+        <!-- Pagination controls -->
         <div class="pagination-controls">
           <button @click="changePage(currentPage - 1)" :disabled="currentPage <= 1" class="btn btn-secondary">
-            Anterior
+            Previous
           </button>
-          <span>Página {{ currentPage }} de {{ lastPage }}</span>
+          <span>Page {{ currentPage }} of {{ lastPage }}</span>
           <button @click="changePage(currentPage + 1)" :disabled="currentPage >= lastPage" class="btn btn-secondary">
-            Siguiente
+            Next
           </button>
         </div>
       </div>
 
-      <!-- Detalles + Formulario CRUD (derecha) -->
+      <!-- Details + CRUD Form (right) -->
       <div class="panel">
         <SchoolDetail
         :school="selectedSchool"
@@ -121,7 +119,6 @@ onMounted(() => fetchSchools());
         @update-school="handleUpdateSchool"
         @delete-school="handleDeleteSchool"
         />
-
       </div>
     </div>
   </div>
@@ -132,48 +129,39 @@ onMounted(() => fetchSchools());
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Centrar verticalmente */
   justify-content: center;
-  /* Centrar horizontalmente */
   min-height: 100vh;
-  /* Ocupa el alto completo de la ventana */
 }
 
 .content-wrapper {
   display: flex;
   gap: 2rem;
-  /* Espacio entre tabla y detalle */
   max-width: 1200px;
-  /* Ancho máximo */
   width: 100%;
 }
 
-/* Paneles */
+/* Panels */
 .panel {
   flex: 1;
   min-width: 400px;
-  /* Tamaño mínimo */
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background: white;
 }
 
-/* Asegurar altura fija para el panel de la tabla */
+/* Ensure fixed height for the table panel */
 .table-panel {
   min-height: 550px;
-  /* Aproximado para 10 registros */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* Mantiene el paginador abajo */
 }
 
-/* Estilos de paginación */
+/* Pagination styles */
 .pagination-controls {
   display: flex;
   justify-content: space-between;
-  /* Espacio entre los botones */
   margin-top: 20px;
 }
 </style>
