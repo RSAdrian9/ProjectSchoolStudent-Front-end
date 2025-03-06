@@ -48,7 +48,7 @@ npm install
 Una vez instaladas las dependencias, ejecuta el servidor de desarrollo para ver el proyecto en tu navegador:
 
 ```bash
-npm run serve
+npm run dev
 ```
 
 El proyecto estará disponible en `http://localhost:8080`.
