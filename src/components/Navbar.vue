@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue'; // Hooks
 import { useRouter } from 'vue-router';
 import api from '../api/api';
 import { showToast } from '../composables/useToast';
@@ -35,6 +35,7 @@ const handleLogout = async () => {
   }
 };
 
+// Hook para cargar el usuario al montar el componente
 onMounted(() => {
   fetchUser(); // Get the user when the component is mounted
 });

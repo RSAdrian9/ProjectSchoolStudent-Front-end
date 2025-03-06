@@ -30,6 +30,7 @@ const fetchData = async () => {
   }
 };
 
+// Hook para cargar el usuario al montar el componente
 onMounted(() => {
   fetchData();
 });
