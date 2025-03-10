@@ -82,9 +82,9 @@ const handleRegister = async () => {
 
     try {
         // If using Sanctum, request the CSRF cookie
-        await axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie');
+        await axios.get('http://docadrian:8080/sanctum/csrf-cookie');
 
-        const response = await axios.post('http://127.0.0.1:8000/api/register', {
+        const response = await axios.post('http://docadrian:8080/api/register', {
             name: name.value,
             email: email.value,
             password: password.value,
