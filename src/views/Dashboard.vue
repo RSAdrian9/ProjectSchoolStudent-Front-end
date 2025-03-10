@@ -12,7 +12,8 @@ const error = ref<string>('');
 const fetchData = async () => {
   try {
     // Fetch user, schools, and students
-    const [schoolsResponse, studentsResponse, userResponse] = await Promise.all([
+    // He quitado userResponse porque no se usa
+    const [schoolsResponse, studentsResponse] = await Promise.all([
       api.get('/schools'),
       api.get('/students'),
       api.get('/user'),
