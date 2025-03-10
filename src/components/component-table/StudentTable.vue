@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { Student } from '../../types/indexType';
+import type { Student, School } from '../../types/indexType';
 import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps<{
   students: Student[];
   selectedStudent: Student | null;
+  school: School | null; //
 }>();
 
 const emit = defineEmits<{
@@ -37,7 +38,7 @@ const selectStudent = (student: Student) => {
           :class="{ selected: isSelected(student) }">
           <td>{{ student.name }}</td>
           <td>{{ student.email }}</td>
-          <td>{{ student.school?.name || 'No School' }}</td>
+          <td>{{ school?.name || 'No School' }}</td>
         </tr>
       </tbody>
     </table>

@@ -4,7 +4,6 @@ import api from '../api/api';
 import StudentTable from '../components/component-table/StudentTable.vue';
 import StudentDetail from '../components/component-detail/StudentDetail.vue';
 import type { Student } from '../types/indexType';
-import axios from 'axios';
 import Navbar from '../components/Navbar.vue';
 import { deleteStudent } from '../services/StudentService';
 import { showToast } from '../composables/useToast';
