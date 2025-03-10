@@ -7,7 +7,7 @@ import axios from "axios";
  * It is configured with the base URL for the API, credentials support, and default headers.
  */
 const API = axios.create({
-  baseURL: "http://docadrian.duckdns.org/api",
+  baseURL: "http://docadrian.duckdns.org:8080/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
