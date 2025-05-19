@@ -7,7 +7,7 @@ import axios from "axios";
  * It is configured with the base URL for the API, credentials support, and default headers.
  */
 const API = axios.create({
-  baseURL: "import.meta.env.VITE_API_BASE_URL",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
