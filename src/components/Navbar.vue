@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'; // Hooks
 import { useRouter } from 'vue-router';
-import api from '../api/api';
-import { showToast } from '../composables/useToast';
+import api from '@/services/api';
+import { showToast } from '@/composables/useToast';
 
 const router = useRouter();
 const userName = ref<string>();
@@ -10,7 +10,7 @@ const userName = ref<string>();
 // Function to get the authenticated user
 const fetchUser = async () => {
   try {
-    const { data } = await api.get('/user'); // Get the user from the backend
+    const { data } = await api.get('/users'); // Get the user from the backend
     userName.value = data.name;
     console.log('Authenticated user:', data);
   } catch (err) {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import api from '../api/api';
+import api from '../services/api';
 import StudentTable from '../components/component-table/StudentTable.vue';
 import StudentDetail from '../components/component-detail/StudentDetail.vue';
 import type { Student } from '../types/indexType';

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import api from '../api/api';
+import api from '../services/api';
 import type { School, Student } from '../types/indexType';
 import Navbar from '../components/Navbar.vue';
 import { showToast } from '../composables/useToast';
@@ -15,8 +15,7 @@ const fetchData = async () => {
     // He quitado userResponse porque no se usa
     const [schoolsResponse, studentsResponse] = await Promise.all([
       api.get('/schools'),
-      api.get('/students'),
-      api.get('/user'),
+      api.get('/users'),
     ]);
 
     // Assign the data correctly

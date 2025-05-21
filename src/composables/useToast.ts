@@ -1,15 +1,13 @@
-// toastUtils.js  
 import { useToast, POSITION } from "vue-toastification";  
 
 const toast = useToast();  
 
 const showToast = (message: string, type = "default", options = {}) => {  
   const defaultOptions = {  
-    position: POSITION.TOP_CENTER, // Posición central en la parte superior  
-    timeout: 3000,         // Duración de 3 segundos 
+    position: POSITION.TOP_CENTER,
+    timeout: 3000,
   };  
 
-  // Combina las opciones predeterminadas con las opciones personalizadas  
   const finalOptions = { ...defaultOptions, ...options };  
 
   switch(type) {  
