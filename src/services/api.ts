@@ -40,7 +40,7 @@ API.interceptors.response.use(
     if (!response) {
       // Error de red, servidor caído, o sin conexión a internet
       console.error("Network or server error:", error);
-      showToast("No se pudo conectar con el servidor. Verifica tu conexión.", "error");
+      showToast("Could not connect to the server. Please check your connection.", "error");
       return Promise.reject(error);
     }
 
@@ -57,20 +57,20 @@ API.interceptors.response.use(
         break;
 
       case 403:
-        showToast("No tienes permisos para esta acción.", "error");
+        showToast("You do not have permission to perform this action.", "error");
         break;
 
       case 404:
-        showToast("El recurso solicitado no fue encontrado.", "error");
+        showToast("The requested resource was not found.", "error");
         break;
 
       case 500:
-        showToast("Error del servidor. Intenta más tarde.", "error");
+        showToast("Server error. Please try again later.", "error");
         break;
 
       default:
         console.error("Error desconocido:", response.status, response.data);
-        showToast("Ocurrió un error. Inténtalo más tarde.", "error");
+        showToast("An error occurred. Please try again later.", "error");
         break;
     }
 
