@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'; // Hooks
 import { useRouter } from 'vue-router';
-import api from '@/services/api';
-import { showToast } from '@/composables/useToast';
+import api from '../services/api';
+import { showToast } from '../composables/useToast';
 
 const router = useRouter();
 const userName = ref<string>();

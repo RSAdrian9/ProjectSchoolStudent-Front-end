@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <router-view></router-view> <!-- Esto es donde se renderizan las rutas -->
+    <Sidebar />
   </div>
 </template>
 
 <script lang="ts">
+import Sidebar from '@/components/Sidebar.vue'
+
 export default {
   name: 'App',
+  components: {
+    Sidebar
+  }
 };
 </script>
 
 <style scoped>
-/* Aquí va tu estilo CSS */
 </style>
