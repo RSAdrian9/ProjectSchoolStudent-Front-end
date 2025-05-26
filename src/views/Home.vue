@@ -1,28 +1,21 @@
 <template>
-    <div class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
-        <div class="text-center">
-            <!-- Welcome -->
-            <h1 class="mb-4 fw-bold">Welcome to the Institute Management Platform!</h1>
-            <p class="lead mb-5">
-                Easily manage student requests. Choose an option to get started.
-            </p>
+  <div class="h-screen flex flex-col">
+    <!-- Navbar (ancho completo) -->
+    <Navbar />
 
-            <!-- Action Buttons -->
-            <div class="d-flex justify-content-center gap-4">
-                <router-link to="/login" class="btn btn-primary btn-lg">Log In</router-link>
-                <router-link to="/register" class="btn btn-outline-primary btn-lg">Register</router-link>
-            </div>
-        </div>
+    <div class="flex flex-1 overflow-hidden">
+      <!-- Sidebar -->
+      <Sidebar />
+
+      <!-- Contenido principal -->
+      <main class="flex-1 overflow-auto bg-gray-100 p-4">
+        <router-view />
+      </main>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-// No logic needed here, just navigation.
+import Sidebar from '../components/Sidebar.vue'
+import Navbar from '../components/Navbar.vue'
 </script>
-
-<style scoped>
-/* Style to center the content */
-.min-vh-100 {
-    min-height: 100vh;
-}
-</style>

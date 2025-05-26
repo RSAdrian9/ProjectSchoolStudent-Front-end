@@ -1,84 +1,57 @@
-<script setup lang="ts">
-import { onMounted, ref } from 'vue'; // Hooks
-import { useRouter } from 'vue-router';
-import api from '../services/api';
-import { showToast } from '../composables/useToast';
-
-const router = useRouter();
-const userName = ref<string>();
-
-// Function to get the authenticated user
-const fetchUser = async () => {
-  try {
-    const { data } = await api.get('/users'); // Get the user from the backend
-    userName.value = data.name;
-    console.log('Authenticated user:', data);
-  } catch (err) {
-    showToast('Error loading user. Redirecting to login.', 'error');
-    console.error('Error getting user:', err);
-    router.push('/login');
-  }
-};
-
-// Logout
-const handleLogout = async () => {
-  try {
-    await api.post('/logout');
-    console.log('Session closed'); // Verify in the console that the session has been closed
-    localStorage.removeItem('token');
-    console.log('Token removed'); // Verify in the console that the token has been removed
-    showToast('Session closed successfully.', 'success');
-    router.push('/'); /* Change the redirection to the home page */
-  } catch (err) {
-    showToast('Error logging out. Try again.', 'error');
-    console.error('Error logging out:', err);
-  }
-};
-
-// Hook para cargar el usuario al montar el componente
-onMounted(() => {
-  fetchUser(); // Get the user when the component is mounted
-});
-</script>
-
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-      <!-- Title on the left -->
-      <a class="navbar-brand" href="/dashboard">Dashboard</a>
-
-      <!-- Navigation buttons -->
-      <div class="d-flex align-items-center">
-        <router-link to="/students" class="nav-link me-3">Students</router-link>
-        <router-link to="/schools" class="nav-link me-3">Schools</router-link>
-
-        <i class="bi bi-person-circle"></i>
-        <!-- User dropdown -->
-        <div class="dropdown">
-          <button
-            class="btn btn-light dropdown-toggle"
-            type="button"
-            id="userDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <!--{{ userName }}-->
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li>
-              <p class="dropdown-item">User: {{ userName }}</p>
-              <button class="dropdown-item" @click="handleLogout">Log out</button>
-            </li>
-          </ul>
+    <header class="w-full h-16 bg-white shadow px-6 flex items-center justify-between navbar">
+        <!-- Logo y nombre de la app -->
+        <div class="flex items-center gap-2 navbar-left">
+            <span class="text-lg font-semibold text-gray-800">Mi Panel</span>
         </div>
-      </div>
-    </div>
-  </nav>
+
+        <!-- Sección derecha: avatar, botones -->
+        <div class="flex items-center gap-4 navbar-right">
+            <el-button circle plain size="small" class="hover:bg-gray-100">
+                <el-icon><Bell /></el-icon>
+            </el-button>
+            <div class="flex items-center gap-2 navbar-user">
+                <img
+                    src="https://i.pravatar.cc/40"
+                    alt="avatar"
+                    class="w-8 h-8 rounded-full border"
+                />
+                <span class="hidden sm:block text-sm font-medium text-gray-700">Juan Pérez</span>
+            </div>
+            <el-button type="danger" size="small">Salir</el-button>
+        </div>
+    </header>
 </template>
 
+<script setup lang="ts">
+import { Bell } from '@element-plus/icons-vue'
+</script>
+
 <style scoped>
-/* Prevent scrolling when the dropdown is displayed */
-.dropdown-menu {
-  position: absolute !important;
+.navbar {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding-left: 1.5rem;
+padding-right: 1.5rem;
+background: #fff;
+box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+height: 4rem;
+overflow: hidden;
+}
+.navbar-left {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+.navbar-right {
+display: flex;
+align-items: center;
+gap: 1rem;
+}
+.navbar-user {
+display: flex;
+align-items: center;
+gap: 0.5rem;
 }
 </style>
